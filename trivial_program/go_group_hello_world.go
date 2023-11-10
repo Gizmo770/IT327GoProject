@@ -1,3 +1,6 @@
+// JD Waldron
+// Simple hello world program
+
 package main
 
 import "fmt"
