@@ -17,10 +17,10 @@ var (
 
 func work(low int, high int) {
 	var localSum int
-	mu.Lock()
 	for i := low; i < high; i++ {
 		localSum += numArray[i]
 	}
+	mu.Lock()
 	totalSum += localSum
 	mu.Unlock()
 	wg.Done()
