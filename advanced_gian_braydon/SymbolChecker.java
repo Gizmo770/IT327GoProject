@@ -3,7 +3,7 @@
     Created on 3/26/22
 */
 
-package StackProgram;
+// package StackProgram;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,8 +31,7 @@ public class SymbolChecker
     public static void main(String[] args)
     {
         SymbolChecker symChk = new SymbolChecker();
-
-        symChk.setup("case1.txt");
+        symChk.setup("advanced_gian_braydon/symbols.txt");
     }
 
     /**
