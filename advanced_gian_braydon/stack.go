@@ -143,7 +143,7 @@ func main() {
 		return
 	}
 	fmt.Println("Unbalanced with open Symbol Test: ")
-	fmt.Println("End of file reached with unmatched symbols: { [")
+	fmt.Println("Expected: End of file reached with unmatched symbols: { [")
 	unbalancedOpenChecker.RunChecker()
 
 	//Opening and closing symbols do not match each other
