@@ -50,8 +50,16 @@ type SymbolChecker struct {
 	line    int
 }
 
-func (checker *SymbolChecker) Setup(filepath string) error {
-	file, err := os.Open(filepath)
+func NewSymbolChecker(filename string) (*SymbolChecker, error) {
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	return &SymbolChecker{scanner: bufio.NewScanner(file)}, nil
+}
+
+func (checker *SymbolChecker) Setup(filename string) error {
+	file, err := os.Open(filename)
 	if err != nil {
 		return err
 	}
@@ -72,31 +80,26 @@ func (checker *SymbolChecker) RunChecker() {
 					checker.stack.Push(currentChar)
 				}
 				if currentChar == ')' || currentChar == ']' || currentChar == '}' {
-					for keepGoing && !checker.stack.isEmpty() {
-						switch currentChar {
-						case ')':
-							if checker.stack.Peek() != '(' {
-								fmt.Printf("%c on line %d has no matching symbols.\n", currentChar, checker.line)
-								keepGoing = false
-							} else {
-									checker.stack.Pop()
+					for keepGoing {
+						if checker.stack.isEmpty() {
+							fmt.Printf("%c on line %d has no matching symbol.\n", currentChar, checker.line)
+							keepGoing = false
+						} else {
+							break
+						}
+					}
+
+					for keepGoing {
+						if currentChar == ')' || currentChar == ']' || currentChar == '}' {
+							opening := checker.stack.Peek()
+							if opening == 0 {
 								break
 							}
-						case ']':
-							if checker.stack.Peek() != '[' {
-								fmt.Printf("%c on line %d has no matching symbols.\n", currentChar, checker.line)
+							if !isMatching(opening, currentChar) {
+								fmt.Printf("%c found on line %d does not match %c.\n", opening, checker.line, currentChar)
 								keepGoing = false
 							} else {
-									checker.stack.Pop()
-								break
-							}
-						case '}':
-							if checker.stack.Peek() != '{' {
-								fmt.Printf("%c on line %d has no matching symbols.\n", currentChar, checker.line)
-								keepGoing = false
-							} else {
-									checker.stack.Pop()
-								}
+								checker.stack.Pop()
 								break
 							}
 						}
@@ -108,20 +111,23 @@ func (checker *SymbolChecker) RunChecker() {
 		checker.line++
 	}
 
-	for keepGoing && !checker.stack.isEmpty() {
-		fmt.Println("End of file reached with unmatched %c \n", checker.stack.Peek())
+	for keepGoing {
+		if !checker.stack.isEmpty() {
+			fmt.Printf("End of file reached with unmatched %c \n", checker.stack.Peek())
+		} else {
+			fmt.Println("All symbols correctly balanced")
+		}
 		keepGoing = false
-	}
-	if keepGoing {
-		fmt.Println("All symbols correctly balanced")
 	}
 }
 
+func isMatching(opening, closing rune) bool {
+	return (opening == '(' && closing == ')') || (opening == '[' && closing == ']') || (opening == '{' && closing == '}')
+}
+
 func main() {
-	checker := &SymbolChecker{}
-	//err := checker.Setup()
-	//if err != nil {}
-	if err := checker.Setup("symbols.txt"); err != nil { //implicit line termination
+	checker, err := NewSymbolChecker("symbols.txt")
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
