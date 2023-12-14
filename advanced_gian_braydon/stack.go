@@ -133,7 +133,9 @@ func main() {
 	}
 	fmt.Println("Balanced Symbol Test: ")
 	fmt.Println("Expected: All symbols correctly balanced")
+	fmt.Print("Actual: ")
 	balancedChecker.RunChecker()
+	fmt.Println()
 
 	//Case 2: Open symbols left, each without a closing symbol
 	unbalancedOpen := "{Is this}[balanced{[enough?]"
@@ -144,7 +146,9 @@ func main() {
 	}
 	fmt.Println("Unbalanced with open Symbol Test: ")
 	fmt.Println("Expected: End of file reached with unmatched symbols: { [")
+	fmt.Print("Actual: ")
 	unbalancedOpenChecker.RunChecker()
+	fmt.Println()
 
 	//Opening and closing symbols do not match each other
 	mismatched := "{Is this}(balanced}[enough?]"
@@ -155,7 +159,9 @@ func main() {
 	}
 	fmt.Println("Unmatched Symbol Test: ")
 	fmt.Println("Expected: ( found on line 1 does not match }.")
+	fmt.Print("Actual: ")
 	mismatchedChecker.RunChecker()
+	fmt.Println()
 
 	//Closing symbol does not match to any opening symbol, also shows multi-line use
 	unbalancedClosed := "(){[]()}\n{}{}\n]{}"
@@ -166,6 +172,8 @@ func main() {
 	}
 	fmt.Println("Multi-line symbol test: ")
 	fmt.Println("Expected: ] on line 3 has no matching symbol")
+	fmt.Print("Actual: ")
 	unbalancedClosedChecker.RunChecker()
+	fmt.Println()
 
 }
